@@ -1,6 +1,6 @@
 import map from 'lodash/map'
-import React, { Component } from 'react'
-import ReactSelect from 'react-select'
+import React, {Component} from 'react'
+import ReactSelect from '@nraynaud/react-select'
 import sum from 'lodash/sum'
 import {
   AutoSizer,
