@@ -13,7 +13,7 @@ import {
   connect,
   signOut,
   subscribePermissions,
-  subscribeResourceSets
+  subscribeResourceSets,
 } from 'xo'
 import {
   createFilter,
@@ -21,7 +21,7 @@ import {
   createSelector,
   getStatus,
   getUser,
-  isAdmin
+  isAdmin,
 } from 'selectors'
 
 import styles from './index.css'
@@ -32,24 +32,24 @@ const returnTrue = () => true
   () => ({
     isAdmin,
     nTasks: createGetObjectsOfType('task').count([
-      task => task.status === 'pending'
+      task => task.status === 'pending',
     ]),
     pools: createGetObjectsOfType('pool'),
     nHosts: createGetObjectsOfType('host').count(),
     srs: createGetObjectsOfType('SR'),
     status: getStatus,
-    user: getUser
+    user: getUser,
   }),
   {
-    withRef: true
+    withRef: true,
   }
 )
 @addSubscriptions({
   permissions: subscribePermissions,
-  resourceSets: subscribeResourceSets
+  resourceSets: subscribeResourceSets,
 })
 export default class Menu extends Component {
-  componentWillMount() {
+  componentWillMount () {
     const updateCollapsed = () => {
       this.setState({ collapsed: window.innerWidth < 1200 })
     }
@@ -62,7 +62,7 @@ export default class Menu extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this._removeListener()
   }
 
@@ -87,7 +87,7 @@ export default class Menu extends Component {
 
   _getNoResourceSets = createSelector(() => this.props.resourceSets, isEmpty)
 
-  get height() {
+  get height () {
     return this.refs.content.offsetHeight
   }
 
@@ -107,7 +107,7 @@ export default class Menu extends Component {
     return signOut()
   }
 
-  render() {
+  render () {
     const { isAdmin, nTasks, status, user, pools, nHosts } = this.props
     const noOperatablePools = this._getNoOperatablePools()
     const noOperatableSrs = this._getNoOperatableSrs()
@@ -124,24 +124,24 @@ export default class Menu extends Component {
           nHosts !== 0 && {
             to: '/home?t=host',
             icon: 'host',
-            label: 'homeHostPage'
+            label: 'homeHostPage',
           },
           !isEmpty(pools) && {
             to: '/home?t=pool',
             icon: 'pool',
-            label: 'homePoolPage'
+            label: 'homePoolPage',
           },
           isAdmin && {
             to: '/home?t=VM-template',
             icon: 'template',
-            label: 'homeTemplatePage'
+            label: 'homeTemplatePage',
           },
           !noOperatableSrs && {
             to: '/home?t=SR',
             icon: 'sr',
-            label: 'homeSrPage'
-          }
-        ]
+            label: 'homeSrPage',
+          },
+        ],
       },
       {
         to: '/infrastructure/dashboard',
@@ -151,39 +151,39 @@ export default class Menu extends Component {
           {
             to: '/infrastructure/dashboard',
             icon: 'menu-infrastructure-dashboard',
-            label: 'dashboardPage'
+            label: 'dashboardPage',
           },
           {
             to: '/infrastructure/tree',
             icon: 'menu-infrastructure-tree',
-            label: 'treePage'
+            label: 'treePage',
           },
           {
             to: '/infrastructure/visualizations',
             icon: 'menu-infrastructure-visualization',
-            label: 'overviewVisualizationDashboardPage'
+            label: 'overviewVisualizationDashboardPage',
           },
           {
             to: '/infrastructure/stats',
             icon: 'menu-infrastructure-stats',
-            label: 'overviewStatsDashboardPage'
+            label: 'overviewStatsDashboardPage',
           },
           {
             to: '/infrastructure/health',
             icon: 'menu-infrastructure-health',
-            label: 'overviewHealthDashboardPage'
+            label: 'overviewHealthDashboardPage',
           },
           {
             to: '/infrastructure/health',
             icon: 'menu-infrastructure-health',
-            label: 'overviewHealthDashboardPage'
-          }
-        ]
+            label: 'overviewHealthDashboardPage',
+          },
+        ],
       },
       isAdmin && {
         to: '/self',
         icon: 'menu-self-service',
-        label: 'selfServicePage'
+        label: 'selfServicePage',
       },
       isAdmin && {
         to: '/backup/overview',
@@ -193,30 +193,30 @@ export default class Menu extends Component {
           {
             to: '/backup/overview',
             icon: 'menu-backup-overview',
-            label: 'backupOverviewPage'
+            label: 'backupOverviewPage',
           },
           {
             to: '/backup/new',
             icon: 'menu-backup-new',
-            label: 'backupNewPage'
+            label: 'backupNewPage',
           },
           {
             to: '/backup/restore',
             icon: 'menu-backup-restore',
-            label: 'backupRestorePage'
+            label: 'backupRestorePage',
           },
           {
             to: '/backup/file-restore',
             icon: 'menu-backup-file-restore',
-            label: 'backupFileRestorePage'
-          }
-        ]
+            label: 'backupFileRestorePage',
+          },
+        ],
       },
       isAdmin && {
         to: '/xoa-update',
         icon: 'menu-update',
         label: 'updatePage',
-        extra: <UpdateTag />
+        extra: <UpdateTag />,
       },
       isAdmin && {
         to: '/settings/servers',
@@ -226,45 +226,45 @@ export default class Menu extends Component {
           {
             to: '/settings/servers',
             icon: 'menu-settings-servers',
-            label: 'settingsServersPage'
+            label: 'settingsServersPage',
           },
           {
             to: '/settings/users',
             icon: 'menu-settings-users',
-            label: 'settingsUsersPage'
+            label: 'settingsUsersPage',
           },
           {
             to: '/settings/groups',
             icon: 'menu-settings-groups',
-            label: 'settingsGroupsPage'
+            label: 'settingsGroupsPage',
           },
           {
             to: '/settings/acls',
             icon: 'menu-settings-acls',
-            label: 'settingsAclsPage'
+            label: 'settingsAclsPage',
           },
           {
             to: '/settings/remotes',
             icon: 'menu-backup-remotes',
-            label: 'backupRemotesPage'
+            label: 'backupRemotesPage',
           },
           {
             to: '/settings/plugins',
             icon: 'menu-settings-plugins',
-            label: 'settingsPluginsPage'
+            label: 'settingsPluginsPage',
           },
           {
             to: '/settings/logs',
             icon: 'menu-settings-logs',
-            label: 'settingsLogsPage'
+            label: 'settingsLogsPage',
           },
           { to: '/settings/ips', icon: 'ip', label: 'settingsIpsPage' },
           {
             to: '/settings/config',
             icon: 'menu-settings-config',
-            label: 'settingsConfigPage'
-          }
-        ]
+            label: 'settingsConfigPage',
+          },
+        ],
       },
       isAdmin && {
         to: '/jobs/overview',
@@ -274,15 +274,15 @@ export default class Menu extends Component {
           {
             to: '/jobs/overview',
             icon: 'menu-jobs-overview',
-            label: 'jobsOverviewPage'
+            label: 'jobsOverviewPage',
           },
           { to: '/jobs/new', icon: 'menu-jobs-new', label: 'jobsNewPage' },
           {
             to: '/jobs/schedules',
             icon: 'menu-jobs-schedule',
-            label: 'jobsSchedulingPage'
-          }
-        ]
+            label: 'jobsSchedulingPage',
+          },
+        ],
       },
       isAdmin && { to: '/about', icon: 'menu-about', label: 'aboutPage' },
       { to: '/tasks', icon: 'task', label: 'taskMenu', pill: nTasks },
@@ -295,21 +295,21 @@ export default class Menu extends Component {
           (isAdmin || !noResourceSets) && {
             to: '/vms/new',
             icon: 'menu-new-vm',
-            label: 'newVmPage'
+            label: 'newVmPage',
           },
           isAdmin && { to: '/new/sr', icon: 'menu-new-sr', label: 'newSrPage' },
           isAdmin && {
             to: '/settings/servers',
             icon: 'menu-settings-servers',
-            label: 'newServerPage'
+            label: 'newServerPage',
           },
           !noOperatablePools && {
             to: '/vms/import',
             icon: 'menu-new-import',
-            label: 'newImport'
-          }
-        ]
-      }
+            label: 'newImport',
+          },
+        ],
+      },
     ]
     /* eslint-enable object-property-newline */
 
@@ -320,18 +320,18 @@ export default class Menu extends Component {
           this.state.collapsed && styles.collapsed
         )}
       >
-        <ul className="nav nav-sidebar nav-pills nav-stacked" ref="content">
+        <ul className='nav nav-sidebar nav-pills nav-stacked' ref='content'>
           <li>
             <span>
-              <a className={styles.brand} href="#">
+              <a className={styles.brand} href='#'>
                 <span className={styles.hiddenUncollapsed}>XO</span>
                 <span className={styles.hiddenCollapsed}>Xen Orchestra</span>
               </a>
             </span>
           </li>
           <li>
-            <a className="nav-link" onClick={this._toggleCollapsed} href="#">
-              <Icon icon="menu-collapse" size="lg" fixedWidth />
+            <a className='nav-link' onClick={this._toggleCollapsed} href='#'>
+              <Icon icon='menu-collapse' size='lg' fixedWidth />
             </a>
           </li>
           {map(
@@ -341,9 +341,9 @@ export default class Menu extends Component {
           <li>&nbsp;</li>
           <li>&nbsp;</li>
           {(isAdmin || +process.env.XOA_PLAN === 5) && (
-            <li className="nav-item xo-menu-item">
+            <li className='nav-item xo-menu-item'>
               <Link
-                className="nav-link"
+                className='nav-link'
                 style={{ display: 'flex' }}
                 to={'/about'}
               >
@@ -355,7 +355,7 @@ export default class Menu extends Component {
                         'text-warning'
                       )}
                     >
-                      <Icon icon="alarm" size="lg" fixedWidth />{' '}
+                      <Icon icon='alarm' size='lg' fixedWidth />{' '}
                       {_('noSupport')}
                     </span>
                     <span
@@ -364,7 +364,7 @@ export default class Menu extends Component {
                         'text-warning'
                       )}
                     >
-                      <Icon icon="alarm" size="lg" fixedWidth />
+                      <Icon icon='alarm' size='lg' fixedWidth />
                     </span>
                   </span>
                 ) : +process.env.XOA_PLAN === 1 ? (
@@ -375,7 +375,7 @@ export default class Menu extends Component {
                         'text-warning'
                       )}
                     >
-                      <Icon icon="info" size="lg" fixedWidth />{' '}
+                      <Icon icon='info' size='lg' fixedWidth />{' '}
                       {_('freeUpgrade')}
                     </span>
                     <span
@@ -384,7 +384,7 @@ export default class Menu extends Component {
                         'text-warning'
                       )}
                     >
-                      <Icon icon="info" size="lg" fixedWidth />
+                      <Icon icon='info' size='lg' fixedWidth />
                     </span>
                   </span>
                 ) : (
@@ -395,7 +395,7 @@ export default class Menu extends Component {
                         'text-success'
                       )}
                     >
-                      <Icon icon="info" size="lg" fixedWidth /> {getXoaPlan()}
+                      <Icon icon='info' size='lg' fixedWidth /> {getXoaPlan()}
                     </span>
                     <span
                       className={classNames(
@@ -403,7 +403,7 @@ export default class Menu extends Component {
                         'text-success'
                       )}
                     >
-                      <Icon icon="info" size="lg" fixedWidth />
+                      <Icon icon='info' size='lg' fixedWidth />
                     </span>
                   </span>
                 )}
@@ -412,32 +412,32 @@ export default class Menu extends Component {
           )}
           <li>&nbsp;</li>
           <li>&nbsp;</li>
-          <li className="nav-item xo-menu-item">
-            <a className="nav-link" onClick={this._signOut} href="#">
-              <Icon icon="sign-out" size="lg" fixedWidth />
+          <li className='nav-item xo-menu-item'>
+            <a className='nav-link' onClick={this._signOut} href='#'>
+              <Icon icon='sign-out' size='lg' fixedWidth />
               <span className={styles.hiddenCollapsed}> {_('signOut')}</span>
             </a>
           </li>
-          <li className="nav-item xo-menu-item">
-            <Link className="nav-link text-xs-center" to={'/user'}>
+          <li className='nav-item xo-menu-item'>
+            <Link className='nav-link text-xs-center' to={'/user'}>
               <Tooltip
                 content={_('editUserProfile', {
-                  username: user ? user.email : ''
+                  username: user ? user.email : '',
                 })}
               >
-                <Icon icon="user" size="lg" />
+                <Icon icon='user' size='lg' />
               </Tooltip>
             </Link>
           </li>
           <li>&nbsp;</li>
           <li>&nbsp;</li>
           {status === 'connecting' ? (
-            <li className="nav-item text-xs-center">{_('statusConnecting')}</li>
+            <li className='nav-item text-xs-center'>{_('statusConnecting')}</li>
           ) : (
             status === 'disconnected' && (
-              <li className="nav-item text-xs-center xo-menu-item">
-                <a className="nav-link" onClick={this._connect} href="#">
-                  <Icon icon="alarm" size="lg" fixedWidth />{' '}
+              <li className='nav-item text-xs-center xo-menu-item'>
+                <a className='nav-link' onClick={this._connect} href='#'>
+                  <Icon icon='alarm' size='lg' fixedWidth />{' '}
                   {_('statusDisconnected')}
                 </a>
               </li>
@@ -454,20 +454,20 @@ const MenuLinkItem = props => {
   const { to, icon, label, subMenu, pill, extra } = item
 
   return (
-    <li className="nav-item xo-menu-item">
+    <li className='nav-item xo-menu-item'>
       <Link
-        activeClassName="active"
+        activeClassName='active'
         className={classNames('nav-link', styles.centerCollapsed)}
         to={to}
       >
         <Icon
           className={classNames((pill || extra) && styles.hiddenCollapsed)}
           icon={`${icon}`}
-          size="lg"
+          size='lg'
           fixedWidth
         />
         <span className={styles.hiddenCollapsed}> {_(label)}&nbsp;</span>
-        {pill > 0 && <span className="tag tag-pill tag-primary">{pill}</span>}
+        {pill > 0 && <span className='tag tag-pill tag-primary'>{pill}</span>}
         {extra}
       </Link>
       {subMenu && <SubMenu items={subMenu} />}
@@ -477,14 +477,14 @@ const MenuLinkItem = props => {
 
 const SubMenu = props => {
   return (
-    <ul className="nav nav-pills nav-stacked xo-sub-menu">
+    <ul className='nav nav-pills nav-stacked xo-sub-menu'>
       {map(
         props.items,
         (item, index) =>
           item && (
-            <li key={index} className="nav-item xo-menu-item">
-              <Link activeClassName="active" className="nav-link" to={item.to}>
-                <Icon icon={`${item.icon}`} size="lg" fixedWidth />{' '}
+            <li key={index} className='nav-item xo-menu-item'>
+              <Link activeClassName='active' className='nav-link' to={item.to}>
+                <Icon icon={`${item.icon}`} size='lg' fixedWidth />{' '}
                 {_(item.label)}
               </Link>
             </li>

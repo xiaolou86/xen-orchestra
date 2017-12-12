@@ -9,22 +9,22 @@ import { get } from 'xo-defined'
 @connectStore({
   vms: createGetObjectsOfType('VM'),
   hosts: createGetObjectsOfType('host'),
-  pools: createGetObjectsOfType('pool')
+  pools: createGetObjectsOfType('pool'),
 })
 export default class Tree extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
-      treeData: [{ title: 'Chicken', children: [{ title: 'Egg' }] }]
+      treeData: [{ title: 'Chicken', children: [{ title: 'Egg' }] }],
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this._updateTree()
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps (newProps) {
     console.log('newProps', newProps)
     if (newProps !== this.props) {
       this._updateTree(newProps)
@@ -51,15 +51,15 @@ export default class Tree extends Component {
             false,
           children: map(filter(vms, ['$container', host.id]), vm => ({
             title: vm.name_label,
-            subtitle: vm.name_description
-          }))
+            subtitle: vm.name_description,
+          })),
         })
       ).concat(
         map(filter(vms, ['$container', pool.id]), vm => ({
           title: vm.name_label,
-          subtitle: vm.name_description
+          subtitle: vm.name_description,
         }))
-      )
+      ),
     }))
 
     console.log('tree', tree)
@@ -68,7 +68,7 @@ export default class Tree extends Component {
 
   _onChange = tree => this.setState({ tree })
 
-  render() {
+  render () {
     return (
       <div style={{ height: '100vh' }}>
         <SortableTree treeData={this.state.tree} onChange={this._onChange} />

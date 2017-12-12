@@ -17,7 +17,6 @@ const HEADER = (
     <Row>
       <Col mediumSize={3}>
         <h2>
-<<<<<<< Updated upstream
           <Icon icon='menu-infrastructure' /> {_('infraPage')}
         </h2>
       </Col>
@@ -39,29 +38,6 @@ const HEADER = (
           </NavLink>
           <NavLink to={'/infrastructure/health'}>
             <Icon icon='menu-infrastructure-health' />{' '}
-=======
-          <Icon icon="menu-infrastructure" /> {_('infraPage')}
-        </h2>
-      </Col>
-      <Col mediumSize={9}>
-        <NavTabs className="pull-right">
-          <NavLink to={'/infrastructure/dashboard'}>
-            <Icon icon="menu-infrastructure-dashboard" /> {_('dashboardPage')}
-          </NavLink>
-          <NavLink to={'/infrastructure/tree'}>
-            <Icon icon="menu-infrastructure-tree" /> {_('treePage')}
-          </NavLink>
-          <NavLink to={'/infrastructure/visualizations'}>
-            <Icon icon="menu-infrastructure-visualization" />{' '}
-            {_('overviewVisualizationDashboardPage')}
-          </NavLink>
-          <NavLink to={'/infrastructure/stats'}>
-            <Icon icon="menu-infrastructure-stats" />{' '}
-            {_('overviewStatsDashboardPage')}
-          </NavLink>
-          <NavLink to={'/infrastructure/health'}>
-            <Icon icon="menu-infrastructure-health" />{' '}
->>>>>>> Stashed changes
             {_('overviewHealthDashboardPage')}
           </NavLink>
         </NavTabs>
@@ -75,15 +51,9 @@ const Infrastructure = routes('infrastructure', {
   dashboard: Dashboard,
   stats: Stats,
   tree: Tree,
-<<<<<<< Updated upstream
   visualizations: Visualizations,
 })(({ children }) => (
   <Page header={HEADER} title='infraPage' formatTitle>
-=======
-  visualizations: Visualizations
-})(({ children }) => (
-  <Page header={HEADER} title="infraPage" formatTitle>
->>>>>>> Stashed changes
     {children}
   </Page>
 ))

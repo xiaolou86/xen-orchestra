@@ -54,11 +54,11 @@ const CONTAINER_STYLE = {
   // Therefore, when there is a scrollbar on the right side, `xo-main`
   // is too large (since the scrollbar uses a few, pixels) which makes
   // an almost useless horizontal scrollbar appear.
-  overflow: 'hidden'
+  overflow: 'hidden',
 }
 const BODY_WRAPPER_STYLE = {
   flex: 1,
-  position: 'relative'
+  position: 'relative',
 }
 const BODY_STYLE = {
   height: '100%',
@@ -66,7 +66,7 @@ const BODY_STYLE = {
   overflow: 'auto',
   position: 'absolute',
   top: 0,
-  width: '100%'
+  width: '100%',
 }
 
 @routes('home', {
@@ -87,24 +87,24 @@ const BODY_STYLE = {
   'vms/new': NewVm,
   'vms/:id': Vm,
   'xoa-update': XoaUpdates,
-  xosan: Xosan
+  xosan: Xosan,
 })
 @connectStore(state => {
   return {
     trial: state.xoaTrialState,
-    signedUp: !!state.user
+    signedUp: !!state.user,
   }
 })
 export default class XoApp extends Component {
   static contextTypes = {
-    router: React.PropTypes.object
+    router: React.PropTypes.object,
   }
   static childContextTypes = {
-    shortcuts: React.PropTypes.object.isRequired
+    shortcuts: React.PropTypes.object.isRequired,
   }
   getChildContext = () => ({ shortcuts: shortcutManager })
 
-  displayOpenSourceDisclaimer() {
+  displayOpenSourceDisclaimer () {
     const previousDisclaimer = cookies.get('previousDisclaimer')
     const now = Math.floor(Date.now() / 1e3)
     const oneWeekAgo = now - 7 * 24 * 3600
@@ -115,7 +115,7 @@ export default class XoApp extends Component {
           <p>{_('disclaimerText1')}</p>
           <p>
             {_('disclaimerText2')}{' '}
-            <a href="https://xen-orchestra.com/#!/xoa?pk_campaign=xoa_source_upgrade&pk_kwd=ossmodal">
+            <a href='https://xen-orchestra.com/#!/xoa?pk_campaign=xoa_source_upgrade&pk_kwd=ossmodal'>
               XOA (turnkey appliance)
             </a>
           </p>
@@ -126,7 +126,7 @@ export default class XoApp extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.refs.bodyWrapper.style.minHeight =
       this.refs.menu.getWrappedInstance().height + 'px'
     if (+process.env.XOA_PLAN === 5) {
@@ -160,14 +160,14 @@ export default class XoApp extends Component {
       case 'HELP':
         alert(
           <span>
-            <Icon icon="shortcuts" /> {_('shortcutModalTitle')}
+            <Icon icon='shortcuts' /> {_('shortcutModalTitle')}
           </span>,
           <Container>
             {map(
               help,
               (context, contextKey) =>
                 context.name && [
-                  <Row className="mt-1" key={contextKey}>
+                  <Row className='mt-1' key={contextKey}>
                     <Col>
                       <h4>{context.name}</h4>
                     </Col>
@@ -177,13 +177,13 @@ export default class XoApp extends Component {
                     ({ message, keys }, key) =>
                       message && (
                         <Row key={`${contextKey}_${key}`}>
-                          <Col size={2} className="text-xs-right">
+                          <Col size={2} className='text-xs-right'>
                             <strong>{isArray(keys) ? keys[0] : keys}</strong>
                           </Col>
                           <Col size={10}>{message}</Col>
                         </Row>
                       )
-                  )
+                  ),
                 ]
             )}
           </Container>
@@ -192,23 +192,23 @@ export default class XoApp extends Component {
     }
   }
 
-  render() {
+  render () {
     const { signedUp, trial } = this.props
     const blocked = signedUp && blockXoaAccess(trial) // If we are under expired or unstable trial (signed up only)
 
     return (
       <IntlProvider>
         <ThemeProvider theme={themes.base}>
-          <DocumentTitle title="Xen Orchestra">
+          <DocumentTitle title='Xen Orchestra'>
             <div style={CONTAINER_STYLE}>
               <Shortcuts
-                name="XoApp"
+                name='XoApp'
                 handler={this._shortcutsHandler}
-                targetNodeSelector="body"
+                targetNodeSelector='body'
                 stopPropagation={false}
               />
-              <Menu ref="menu" />
-              <div ref="bodyWrapper" style={BODY_WRAPPER_STYLE}>
+              <Menu ref='menu' />
+              <div ref='bodyWrapper' style={BODY_WRAPPER_STYLE}>
                 <div style={BODY_STYLE}>
                   {blocked ? (
                     <XoaUpdates />
