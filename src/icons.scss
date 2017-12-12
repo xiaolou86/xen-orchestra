@@ -680,12 +680,16 @@
     @extend .fa;
     @extend .fa-home;
   }
-  &-menu-dashboard {
+  &-menu-infrastructure {
     @extend .fa;
-    @extend .fa-dashboard;
-    &-overview {
+    @extend .fa-eye;
+    &-dashboard {
       @extend .fa;
-      @extend .fa-eye;
+      @extend .fa-dashboard;
+    }
+    &-tree {
+      @extend .fa;
+      @extend .fa-tree;
     }
     &-visualization {
       @extend .fa;
