@@ -9,6 +9,7 @@ import { NavLink, NavTabs } from 'nav'
 import Health from './health'
 import Overview from './overview'
 import Stats from './stats'
+import Tree from './tree'
 import Visualizations from './visualizations'
 
 const HEADER = (
@@ -46,6 +47,7 @@ const Dashboard = routes('overview', {
   health: Health,
   overview: Overview,
   stats: Stats,
+  tree: Tree,
   visualizations: Visualizations,
 })(({ children }) => (
   <Page header={HEADER} title='dashboardPage' formatTitle>
