@@ -11,6 +11,7 @@ import Button from './button'
 import Icon from './icon'
 import propTypes from './prop-types-decorator'
 import Tooltip from './tooltip'
+import { generateRandomId } from './utils'
 import {
   disable as disableShortcuts,
   enable as enableShortcuts,
@@ -19,13 +20,16 @@ import {
 // -----------------------------------------------------------------------------
 
 let instance
-const modal = (content, onClose) => {
+const modal = (content, onClose, props) => {
   if (!instance) {
     throw new Error('No modal instance.')
   } else if (instance.state.showModal) {
     throw new Error('Other modal still open.')
   }
-  instance.setState({ content, onClose, showModal: true }, disableShortcuts)
+  instance.setState(
+    { content, onClose, showModal: true, props },
+    disableShortcuts
+  )
 }
 
 const _addRef = (component, ref) => {
@@ -254,6 +258,37 @@ export const confirm = ({ body, icon = 'alarm', title, strongConfirm }) =>
 
 // -----------------------------------------------------------------------------
 
+export const form = ({ component: Component, title, size }) =>
+  new Promise((resolve, reject) => {
+    const formId = generateRandomId()
+
+    const buttons = [
+      {
+        btnStyle: 'primary',
+        label: _('formSave'),
+        form: formId,
+      },
+    ]
+    modal(
+      <form id={formId}>
+        <GenericModal
+          buttons={buttons}
+          title={title}
+          reject={reject}
+          resolve={resolve}
+        >
+          <Component />
+        </GenericModal>
+      </form>,
+      reject,
+      {
+        bsSize: size,
+      }
+    )
+  })
+
+// -----------------------------------------------------------------------------
+
 export default class Modal extends Component {
   constructor () {
     super()
@@ -284,8 +319,9 @@ export default class Modal extends Component {
   }
 
   render () {
+    const { showModal, props } = this.state
     return (
-      <ReactModal show={this.state.showModal} onHide={this._onHide}>
+      <ReactModal show={showModal} onHide={this._onHide} {...props}>
         {this.state.content}
       </ReactModal>
     )
