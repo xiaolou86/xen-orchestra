@@ -1,8 +1,10 @@
 import _ from 'intl'
 import ActionButton from 'action-button'
+import Component from 'base-component'
 import defined, { get } from 'xo-defined'
 import Icon from 'icon'
 import Link from 'link'
+import moment from 'moment-timezone'
 import React from 'react'
 import renderXoItem, { renderXoItemFromId } from 'render-xo-item'
 import Select from 'form/select'
@@ -13,6 +15,7 @@ import { constructSmartPattern, destructSmartPattern } from 'smart-backup'
 import { Container, Col, Row } from 'grid'
 import { createGetObjectsOfType } from 'selectors'
 import { flatten, includes, isEmpty, keyBy, map, mapValues, some } from 'lodash'
+import { form } from 'modal'
 import { injectState, provideState } from '@julien-f/freactal'
 import { Map } from 'immutable'
 import { Number } from 'form'
@@ -34,10 +37,10 @@ import {
   subscribeRemotes,
 } from 'xo'
 
+import NewSchedule from './new-schedule'
 import Schedules from './schedules'
 import SmartBackup from './smart-backup'
 import {
-  DEFAULT_RETENTION,
   destructPattern,
   FormFeedback,
   FormGroup,
@@ -47,6 +50,16 @@ import {
 } from './../utils'
 
 // ===================================================================
+
+const DEFAULT_RETENTION = 1
+
+const DEFAULT_SCHEDULE = {
+  copyRetention: DEFAULT_RETENTION,
+  exportRetention: DEFAULT_RETENTION,
+  snapshotRetention: DEFAULT_RETENTION,
+  cron: '0 0 * * *',
+  timezone: moment.tz.guess(),
+}
 
 const SR_BACKEND_FAILURE_LINK =
   'https://xen-orchestra.com/docs/backup_troubleshooting.html#srbackendfailure44-insufficient-space'
@@ -122,7 +135,6 @@ const getInitialState = () => ({
   crMode: false,
   deltaMode: false,
   drMode: false,
-  editionMode: undefined,
   formId: generateRandomId(),
   inputConcurrencyId: generateRandomId(),
   inputReportWhenId: generateRandomId(),
@@ -140,7 +152,6 @@ const getInitialState = () => ({
   tags: {
     notValues: ['Continuous Replication', 'Disaster Recovery'],
   },
-  tmpSchedule: undefined,
   vms: [],
 })
 
@@ -373,22 +384,49 @@ export default [
           ...destructVmsPattern(job.vms),
         }
       },
-      addSchedule: () => state => ({
-        ...state,
-        editionMode: 'creation',
-      }),
-      cancelSchedule: () => state => ({
-        ...state,
-        tmpSchedule: undefined,
-        editionMode: undefined,
-      }),
-      editSchedule: (_, schedule) => state => ({
-        ...state,
-        editionMode: 'editSchedule',
-        tmpSchedule: {
-          ...schedule,
-        },
-      }),
+      showScheduleModal: (
+        { saveSchedule },
+        propSchedule = DEFAULT_SCHEDULE
+      ) => async ({ copyMode, exportMode, snapshotMode }) => {
+        const newSchedule = await form({
+          title: (
+            <span>
+              <Icon icon='schedule' /> {_('schedule')}
+            </span>
+          ),
+          component: class extends Component {
+            state = {
+              schedule: undefined,
+            }
+
+            get value () {
+              const { schedule = propSchedule } = this.state
+              return schedule
+            }
+
+            render () {
+              return (
+                <NewSchedule
+                  propSchedule={propSchedule}
+                  schedule={this.state.schedule}
+                  modes={{
+                    copyMode,
+                    exportMode,
+                    snapshotMode,
+                  }}
+                  onChange={this.linkState('schedule')}
+                />
+              )
+            }
+          },
+          size: 'large',
+        })
+
+        saveSchedule({
+          id: propSchedule.id,
+          schedule: newSchedule,
+        })
+      },
       deleteSchedule: (_, schedule) => ({
         schedules: oldSchedules,
         propSettings,
@@ -402,17 +440,17 @@ export default [
           settings: settings.delete(id),
         }
       },
-      saveSchedule: (_, { cron, timezone, name, ...setting }) => ({
-        editionMode,
+      saveSchedule: (
+        _,
+        { schedule: { cron, timezone, name, ...setting }, id }
+      ) => ({
         propSettings,
         schedules: oldSchedules,
         settings = propSettings,
-        tmpSchedule,
       }) => {
-        if (editionMode === 'creation') {
+        if (id === undefined) {
           const id = generateRandomId()
           return {
-            editionMode: undefined,
             schedules: {
               ...oldSchedules,
               [id]: {
@@ -426,9 +464,7 @@ export default [
           }
         }
 
-        const id = tmpSchedule.id
         const schedules = { ...oldSchedules }
-
         schedules[id] = {
           ...schedules[id],
           cron,
@@ -437,10 +473,8 @@ export default [
         }
 
         return {
-          editionMode: undefined,
           schedules,
           settings: settings.set(id, setting),
-          tmpSchedule: undefined,
         }
       },
       setPowerState: (_, powerState) => state => ({
