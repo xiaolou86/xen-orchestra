@@ -58,11 +58,12 @@ export default [
         setSchedule({
           name: 'cron',
           value: cronPattern,
-        })
-        setSchedule({
-          name: 'timezone',
-          value: timezone,
-        })
+        }).then(() =>
+          setSchedule({
+            name: 'timezone',
+            value: timezone,
+          })
+        )
       },
       setName: ({ setSchedule }, { target: { value } }) => () => {
         setSchedule({
